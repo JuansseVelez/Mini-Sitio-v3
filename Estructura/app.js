@@ -11,8 +11,15 @@ function agregarTarea() {
 
     const li = document.createElement('li');
     li.textContent = taskText;
-    taskList.appendChild(li);
+    li.style.cursor = 'pointer';
 
+    // Marcar tarea como completa al hacer click
+    li.addEventListener('click', function() {
+        this.style.textDecoration = this.style.textDecoration === 'line-thorugh' ? 'none' : 'line-through';
+        this.style.opacity = this.style.opacity === '0.5' ? '1' : '0.5';
+    });
+
+    taskList.appendChild(li);
     input.value = '';
 }
 
