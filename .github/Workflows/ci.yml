@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies (if package.json exists)
+        run: |
+          if [ -f package.json ]; then
+            npm ci || npm install
+          else
+            echo "No package.json found, skipping install"
+          fi
+
+      - name: Lint with Prettier
+        run: npx prettier . --check
+
+      - name: Run tests (Node test runner)
+        run: |
+          if [ -d tests ]; then
+            node --test
+          else
+            echo "No tests folder found"
+          fi
